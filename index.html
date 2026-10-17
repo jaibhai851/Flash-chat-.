@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111827"><title>FlashChat</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <header class="brand-row"><div class="brand-icon">ϟ</div><div><h1>FlashChat</h1><small>Messages that move</small></div><button id="themeBtn" class="icon-btn" title="Toggle theme">☼</button></header>
+      <section id="authPanel" class="auth-panel">
+        <h2>Welcome back</h2><p class="muted">Sign in or create your account.</p>
+        <form id="authForm">
+          <label>Email<input id="email" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+          <label>Password<input id="password" type="password" minlength="6" autocomplete="current-password" required placeholder="At least 6 characters"></label>
+          <label id="usernameWrap" class="hidden">Username<input id="username" maxlength="24" placeholder="yourname"></label>
+          <div class="auth-actions"><button class="primary" type="submit" id="authSubmit">Sign in</button><button type="button" class="text-btn" id="modeBtn">Create account</button></div>
+          <button type="button" class="text-btn" id="resetBtn">Forgot password?</button>
+        </form><p id="authError" class="error"></p>
+      </section>
+      <section id="chatPanel" class="hidden">
+        <div class="profile-strip"><div class="avatar" id="myAvatar">F</div><div class="profile-copy"><strong id="myName">You</strong><small id="myEmail"></small></div><button id="logoutBtn" class="icon-btn" title="Log out">↪</button></div>
+        <div class="search-wrap"><span>⌕</span><input id="userSearch" placeholder="Find people by username"></div>
+        <div id="searchResults" class="search-results hidden"></div>
+        <div class="section-label"><span>RECENT CHATS</span><span class="online-dot"></span></div>
+        <div id="conversationList" class="conversation-list"><div class="empty-mini">Your conversations will appear here.</div></div>
+        <div class="sidebar-footer"><span class="status-pip"></span> Connected to Firebase when configured</div>
+      </section>
+    </aside>
+    <main class="main-area">
+      <div id="welcome" class="welcome"><div class="welcome-art"><div class="art-bubble">✦</div><div class="art-orbit"></div></div><h2>Your conversations, in a flash.</h2><p>Choose a chat or find someone by their username to start talking.</p><div class="feature-row"><span>⚡ Real-time</span><span>⌁ Media sharing</span><span>◈ Private by rules</span></div></div>
+      <section id="chatView" class="chat-view hidden">
+        <header class="chat-header"><div class="avatar" id="peerAvatar">F</div><div class="chat-heading"><strong id="chatTitle">Conversation</strong><small id="chatSubtitle">Messages are synchronized in real time</small></div><div class="header-actions"><button id="callBtn" class="icon-btn" title="Start video call">▣</button><button id="chatInfoBtn" class="icon-btn" title="Conversation details">ⓘ</button></div></header>
+        <div id="messages" class="messages"><div class="empty-chat">Say hello 👋</div></div>
+        <div id="uploadStatus" class="upload-status hidden"></div>
+        <form id="messageForm" class="composer"><button type="button" id="attachBtn" class="attach-btn" title="Attach file">＋</button><input type="file" id="fileInput" class="hidden" accept="image/*,video/*,audio/*,.pdf,.txt,.doc,.docx,.zip"><input id="messageInput" autocomplete="off" placeholder="Write a message..." maxlength="4000"><button type="button" id="voiceBtn" class="icon-btn" title="Record voice message">🎙</button><button type="submit" class="send-btn" title="Send message">➤</button></form>
+        <div class="composer-hint">Enter to send · Attachments upload to Firebase Storage</div>
+      </section>
+    </main>
+  </div>
+  <div id="toast" class="toast hidden"></div>
+  <dialog id="infoDialog"><div class="dialog-inner"><button class="dialog-close" id="closeDialog">×</button><h3>Conversation details</h3><p id="infoText" class="muted"></p><p class="muted small">FlashChat uses Firebase transport and access rules. It is not end-to-end encrypted by default.</p></div></dialog>
+  <script type="module" src="app.js"></script>
+</body></html>

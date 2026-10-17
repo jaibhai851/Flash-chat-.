@@ -1,0 +1,18 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() { return request.auth != null; }
+    function conversationMember(conversationId) {
+      return signedIn() &&
+        request.auth.uid in firestore.get(/databases/(default)/documents/conversations/$(conversationId)).data.members;
+    }
+    match /conversationMedia/{conversationId}/{uid}/{fileName} {
+      allow read: if conversationMember(conversationId);
+      allow create: if signedIn() && request.auth.uid == uid
+        && conversationMember(conversationId)
+        && request.resource.size <= 25 * 1024 * 1024
+        && request.resource.contentType.matches('(image/.*|video/.*|audio/.*|application/pdf|text/.*|application/zip|application/vnd\\..*)');
+      allow update, delete: if signedIn() && request.auth.uid == uid && conversationMember(conversationId);
+    }
+  }
+}

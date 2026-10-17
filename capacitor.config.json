@@ -1,0 +1,8 @@
+{
+  "appId": "com.flashchat.app",
+  "appName": "FlashChat",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
