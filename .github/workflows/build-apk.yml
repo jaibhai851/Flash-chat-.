@@ -12,7 +12,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
 
     steps:
       - name: Checkout source
@@ -21,45 +20,46 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: 20
+          cache: npm
 
-      - name: Setup Java (for Android Gradle)
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: 21
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-        with:
-          api-levels: 33
-          build-tools: '33.0.2'
 
       - name: Install project dependencies
-        run: npm ci
+        run: npm install
+
+      - name: Prepare web assets for Capacitor
+        run: |
+          # Ensure webDir exists and contains the app's web files (capacitor.config.json expects "www")
+          mkdir -p www
+          # Copy repo web files into www; exclude build/system files and android output if present
+          rsync -av --exclude 'android' --exclude 'node_modules' --exclude '.git' --exclude '.github' --exclude '*.zip' ./ www/
+          ls -la www
 
       - name: Install Capacitor Android dependencies
-        run: npm install --no-audit --no-fund @capacitor/core @capacitor/cli @capacitor/android
+        run: npm install @capacitor/core @capacitor/cli @capacitor/android
 
-      - name: Ensure android project exists
+      - name: Add Android project (only if missing)
         run: |
           if [ ! -d android ]; then
-            echo "Adding Android project via Capacitor"
             npx cap add android
           else
-            echo "android/ already exists, skipping cap add"
+            echo "android/ exists, skipping cap add"
           fi
 
-      - name: Sync web assets
+      - name: Sync web assets with Android project
         run: npx cap sync android
-
-      - name: Make gradlew executable
-        run: chmod +x android/gradlew || true
 
       - name: Build APK
         working-directory: android
-        run: ./gradlew assembleDebug --no-daemon -Pci
+        run: ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
