@@ -1,17 +1,7 @@
 {
-  "name": "flashchat-android",
-  "version": "1.0.0",
+  "name": "flashchat-functions",
   "private": true,
-  "description": "FlashChat Android wrapper project",
-  "scripts": {
-    "build": "echo \"Static web app: no build step required\"",
-    "android:sync": "npx cap sync android"
-  },
-  "dependencies": {
-    "@capacitor/android": "^7.4.3",
-    "@capacitor/core": "^7.4.3"
-  },
-  "devDependencies": {
-    "@capacitor/cli": "^7.4.3"
-  }
+  "engines": {"node": "20"},
+  "main": "index.js",
+  "dependencies": {"firebase-admin": "^13.0.0", "firebase-functions": "^6.0.0"}
 }
